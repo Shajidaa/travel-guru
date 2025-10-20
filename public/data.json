@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "name": "COX'S BAZAR",
+    "img": "https://i.ibb.co.com/LdY23NHB/Rectangle-1.png",
+    "desc": "Cox’s Bazar, located on the southeast coast of Bangladesh, is home to the world’s longest natural sea beach, stretching over 120 kilometers. The town offers golden sandy shores, turquoise waters, and mesmerizing sunrises and sunsets. Tourists can enjoy beach sports, visit Himchari Waterfall, Inani Beach, or the ancient Aggameda Khyang monastery. Nearby Sonadia Island is a sanctuary for sea turtles and migratory birds, making it a paradise for nature enthusiasts and photographers."
+  },
+  {
+    "id": 2,
+    "name": "SREEMANGAL",
+    "img": "https://i.ibb.co.com/8gJ2w3bR/Sreemongol.png",
+    "desc": "Sreemangal, the tea capital of Bangladesh, is a serene and picturesque region covered with endless tea gardens and lush green hills. Visitors can explore Lawachara National Park, home to rare species like hoolock gibbons, and enjoy the unique experience of tasting the famous seven-layer tea. Madhabpur Lake and nearby tribal villages offer calm and scenic views, while the cool climate makes it a perfect retreat for travelers seeking peace and nature."
+  },
+  {
+    "id": 3,
+    "name": "SUNDARBANS",
+    "img": "https://i.ibb.co.com/MygxgJK2/sundorbon.png",
+    "desc": "The Sundarbans is the largest mangrove forest in the world and a UNESCO World Heritage Site, located in the southern part of Bangladesh. This vast forest is home to the Royal Bengal Tiger, saltwater crocodiles, and countless species of birds and aquatic animals. Visitors can explore the forest through boat safaris, enjoy birdwatching, and experience the magical stillness of nature. The Sundarbans also serve as a natural barrier protecting the coastline from cyclones and tidal surges."
+  }
+
+]
+
+
+
