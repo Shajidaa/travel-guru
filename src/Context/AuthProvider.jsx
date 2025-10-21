@@ -4,16 +4,22 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import auth from "../Firebase/Firebase.config";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const googleProvider = new GoogleAuthProvider();
+  const googleSignIn = () => {
+    return signInWithPopup(auth, googleProvider);
+  };
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -41,12 +47,15 @@ const AuthProvider = ({ children }) => {
   };
 
   //forget password
+  const forgerPassword = (email) => {
+    setLoading(true);
+    return sendPasswordResetEmail(auth, email);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currUser) => {
       if (currUser && currUser.emailVerified) {
         setUser(currUser);
-        console.log(currUser);
       } else {
         setUser(null);
       }
@@ -66,6 +75,8 @@ const AuthProvider = ({ children }) => {
     signOutUser,
     updateProfileUser,
     loginUser,
+    forgerPassword,
+    googleSignIn,
   };
 
   return <AuthContext value={authValue}>{children}</AuthContext>;

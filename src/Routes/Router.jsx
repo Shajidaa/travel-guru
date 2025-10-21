@@ -4,6 +4,7 @@ import Booking from "../Pages/Home/Booking";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Home/Login";
 import Register from "../Pages/Home/Register";
+import PrivateRoute from "./PrivateRoute";
 
 const Router = createBrowserRouter([
   {
@@ -16,7 +17,11 @@ const Router = createBrowserRouter([
       },
       {
         path: "/booking/:id",
-        element: <Booking></Booking>,
+        element: (
+          <PrivateRoute>
+            <Booking></Booking>
+          </PrivateRoute>
+        ),
         loader: () => fetch("data.json"),
       },
       {

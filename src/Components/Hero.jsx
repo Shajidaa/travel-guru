@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router";
+import { toast } from "react-toastify";
 
 const Hero = () => {
   const [destination, setDestination] = useState([]);
@@ -14,7 +15,7 @@ const Hero = () => {
         setDestination(data);
         setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err.message));
   }, []);
   if (loading) {
     return <p>loading</p>;

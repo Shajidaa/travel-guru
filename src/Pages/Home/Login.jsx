@@ -7,12 +7,21 @@ import { AuthContext } from "../../Context/AuthContext";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const { loginUser, setUser, setLoading } = useContext(AuthContext);
+  const { loginUser, setUser, setLoading, forgerPassword, googleSignIn } =
+    useContext(AuthContext);
   const location = useLocation();
   const emailRef = useRef();
-  // const from = location.state || "/";
+  const from = location.state || "/";
   const navigate = useNavigate();
 
+  const handelGoogleSignIn = () => {
+    googleSignIn().then((result) => {
+      setLoading(false);
+      setUser(result.user);
+      navigate(from);
+      toast.success("Google sing in successfully");
+    });
+  };
   const handleLogin = (e) => {
     e.preventDefault();
 
@@ -22,7 +31,6 @@ const Login = () => {
     const password = formTarget.password.value;
     loginUser(email, password)
       .then((res) => {
-        console.log(res);
         setLoading(false);
         if (!res.user.emailVerified) {
           toast.error("Your Email is not verified ");
@@ -33,7 +41,18 @@ const Login = () => {
         toast("login successfully");
         navigate(location.state?.from || "/");
       })
-      .catch((error) => console.log(error.message));
+      .catch((error) => toast.error(error.message));
+  };
+  const handleForgetPassword = () => {
+    const email = emailRef.current.value;
+    forgerPassword(email)
+      .then(() => {
+        setLoading(false);
+        toast.success("Check your email to reset password");
+      })
+      .catch((error) => {
+        return toast.error(error.message);
+      });
   };
   return (
     <>
@@ -59,7 +78,10 @@ const Login = () => {
                     placeholder="Password"
                   />
                   <div>
-                    <a className="link link-hover font-medium">
+                    <a
+                      onClick={handleForgetPassword}
+                      className="link link-hover font-medium"
+                    >
                       Forgot password?
                     </a>
                   </div>
@@ -81,7 +103,10 @@ const Login = () => {
           </div>
           <div className="divider">Or</div>
           <div className="flex flex-col">
-            <button className="btn bg-transparent rounded-2xl border-black   mt-4">
+            <button
+              onClick={handelGoogleSignIn}
+              className="btn bg-transparent rounded-2xl border-black   mt-4"
+            >
               <FcGoogle className="size-5" /> Continue with Google
             </button>
             <button className="btn bg-transparent rounded-2xl border-black  mt-4">

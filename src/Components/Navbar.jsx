@@ -15,7 +15,7 @@ const Navbar = () => {
           return navigate("/");
         }
       })
-      .catch((er) => console.log(er.message));
+      .catch((er) => toast.error(er.message));
   };
   return (
     <div className="absolute top-0 left-0 w-full flex justify-between items-center px-10 py-5 text-black z-50">

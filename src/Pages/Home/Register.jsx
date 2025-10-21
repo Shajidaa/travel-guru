@@ -1,7 +1,7 @@
 import React, { use } from "react";
 import { FaFacebook, FaLeaf } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../Context/AuthContext";
 import { toast } from "react-toastify";
 
@@ -10,12 +10,16 @@ const Register = () => {
     createUser,
     updateProfileUser,
     setUser,
-    user,
+
     verifyEmail,
     setLoading,
     signOutUser,
+    googleSignIn,
   } = use(AuthContext);
-  console.log(user);
+
+  const location = useLocation();
+  const from = location.state || "/";
+
   const navigate = useNavigate();
   const handleRegister = (e) => {
     e.preventDefault();
@@ -30,36 +34,43 @@ const Register = () => {
     if (password !== confirmPassword) {
       return toast.error("Your password is not same with confirm password");
     } else {
-      createUser(email, password).then((res) => {
-        // console.log(res.user);
-        //update profile
-        updateProfileUser(displayName)
-          .then(() => {
-            console.log(res);
-            //email verification
-            verifyEmail()
-              .then(() => {
-                setLoading(false);
-                //sign out user
-                signOutUser().then(() => {
-                  toast.success(
-                    "Account created successfully! Check your email to verify your account."
-                  );
-                  setUser(null);
+      createUser(email, password)
+        .then(() => {
+          // console.log(res.user);
+          //update profile
+          updateProfileUser(displayName)
+            .then(() => {
+              //email verification
+              verifyEmail()
+                .then(() => {
                   setLoading(false);
-                  navigate("/login");
-                });
-              })
-              .catch((e) => {
-                toast.error(e.message);
-              })
-              .catch((error) => toast.error(error.message));
-          })
-          .catch((error) => toast.error(error.message));
-      });
+                  //sign out user
+                  signOutUser().then(() => {
+                    toast.success(
+                      "Account created successfully! Check your email to verify your account."
+                    );
+                    setUser(null);
+                    setLoading(false);
+                    navigate("/login");
+                  });
+                })
+                .catch((e) => {
+                  toast.error(e.message);
+                })
+                .catch((error) => toast.error(error.message));
+            })
+            .catch((error) => toast.error(error.message));
+        })
+        .catch((error) => toast.error(error.message));
     }
   };
-
+  const handelGoogleSignIn = () => {
+    googleSignIn().then((result) => {
+      setLoading(false);
+      setUser(result.user);
+      navigate(from);
+    });
+  };
   return (
     <div className="flex justify-center items-center min-h-dvh md:mt-10 mt-20">
       <div className="">
@@ -129,7 +140,11 @@ const Register = () => {
         </div>
         <div className="divider">Or</div>
         <div className="flex flex-col">
-          <button className="btn bg-transparent rounded-2xl border-black   mt-4">
+          <button
+            type="submit"
+            onClick={handelGoogleSignIn}
+            className="btn bg-transparent rounded-2xl border-black   mt-4"
+          >
             <FcGoogle className="size-5" /> Continue with Google
           </button>
           <button className="btn bg-transparent rounded-2xl border-black  mt-4">
