@@ -1,8 +1,40 @@
+import { useContext, useRef } from "react";
 import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router";
+
+import { Link, useLocation, useNavigate } from "react-router";
+import { AuthContext } from "../../Context/AuthContext";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const { loginUser, setUser, setLoading } = useContext(AuthContext);
+  const location = useLocation();
+  const emailRef = useRef();
+  // const from = location.state || "/";
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    const formTarget = e.target;
+
+    const email = formTarget.email.value;
+    const password = formTarget.password.value;
+    loginUser(email, password)
+      .then((res) => {
+        console.log(res);
+        setLoading(false);
+        if (!res.user.emailVerified) {
+          toast.error("Your Email is not verified ");
+          return;
+        }
+
+        setUser(res.user);
+        toast("login successfully");
+        navigate(location.state?.from || "/");
+      })
+      .catch((error) => console.log(error.message));
+  };
   return (
     <>
       <div className="flex justify-center items-center min-h-dvh">
@@ -10,27 +42,35 @@ const Login = () => {
           <div className="card bg-base-100 w-full max-w-sm shrink-0 border border-gray-500 ">
             <div className="card-body">
               <h1 className="text-2xl font-bold">Login</h1>
-              <fieldset className="fieldset">
-                <input
-                  type="email"
-                  className="input border-0 border-b  placeholder-black font-semibold "
-                  placeholder="Username or Email"
-                />
+              <form onSubmit={handleLogin}>
+                <fieldset className="fieldset">
+                  <input
+                    type="email"
+                    ref={emailRef}
+                    name="email"
+                    className="input border-0 border-b  placeholder-black font-semibold "
+                    placeholder="Username or Email"
+                  />
 
-                <input
-                  type="password"
-                  className="input border-0 border-b placeholder-black font-semibold "
-                  placeholder="Password"
-                />
-                <div>
-                  <a className="link link-hover font-medium">
-                    Forgot password?
-                  </a>
-                </div>
-                <button className="btn  border-0 bg-[#F9A51A] mt-4">
-                  Login
-                </button>
-              </fieldset>
+                  <input
+                    type="password"
+                    name="password"
+                    className="input border-0 border-b placeholder-black font-semibold "
+                    placeholder="Password"
+                  />
+                  <div>
+                    <a className="link link-hover font-medium">
+                      Forgot password?
+                    </a>
+                  </div>
+                  <button
+                    type="submit"
+                    className="btn  border-0 bg-[#F9A51A] mt-4"
+                  >
+                    Login
+                  </button>
+                </fieldset>
+              </form>
               <p className="text-center  font-semibold">
                 Don't have an account?{" "}
                 <Link to={"/register"} className="underline text-[#F9A51A]">

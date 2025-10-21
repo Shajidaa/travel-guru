@@ -1,7 +1,22 @@
+import { useContext } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
+import { AuthContext } from "../Context/AuthContext";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
+  const { user, signOutUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+    signOutUser()
+      .then(() => {
+        toast.success("Log out successfully!");
+        if (!user) {
+          return navigate("/");
+        }
+      })
+      .catch((er) => console.log(er.message));
+  };
   return (
     <div className="absolute top-0 left-0 w-full flex justify-between items-center px-10 py-5 text-black z-50">
       <div className="flex items-center gap-2">
@@ -24,12 +39,22 @@ const Navbar = () => {
         <NavLink className="hover:text-yellow-400">Destination</NavLink>
         <NavLink className="hover:text-yellow-400">Blog</NavLink>
         <NavLink className="hover:text-yellow-400">Contact</NavLink>
-        <NavLink
-          to="/login"
-          className="btn bg-yellow-500 hover:bg-yellow-600 border-none px-5"
-        >
-          Login
-        </NavLink>
+        {user ? (
+          <button
+            className="btn bg-yellow-500 hover:bg-yellow-600 border-none px-5"
+            type="submit"
+            onClick={handleLogOut}
+          >
+            Log Out
+          </button>
+        ) : (
+          <NavLink
+            to="/login"
+            className="btn bg-yellow-500 hover:bg-yellow-600 border-none px-5"
+          >
+            Login
+          </NavLink>
+        )}
       </ul>
     </div>
   );
